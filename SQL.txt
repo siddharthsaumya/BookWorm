@@ -1,0 +1,96 @@
+create database BookwormDB;
+use BookwormDB;
+
+-- Genre table: stores information about book genres
+CREATE TABLE Genre (
+    ID INT NOT NULL IDENTITY  PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL
+);
+
+-- Users table: stores information about users
+CREATE TABLE Users (
+    ID INT NOT NULL IDENTITY PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    Username VARCHAR(255) NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL,
+    IsActive BIT DEFAULT 1,
+    IsSeller BIT DEFAULT 0
+);
+
+-- Books table: stores information about books
+CREATE TABLE Books (
+    ID INT NOT NULL IDENTITY PRIMARY KEY,
+    Title VARCHAR(255) NOT NULL,
+    Author VARCHAR(255) NOT NULL,
+    Description VARCHAR(Max),
+    Condition INT NOT NULL, -- 1: New, 2: Used
+    Price INT NOT NULL,
+    TotalPages INT,
+    ISBN VARCHAR(20),
+    Publisher VARCHAR(255),
+    PublicationDate DATE,
+    Language VARCHAR(50),
+    NumberOfCopies INT,
+    CoverImage VARCHAR(255),
+    TargetAge INT, -- 1: Kids, 2: 18+, 3: Any
+    GenreID INT,
+    SellerID INT,
+    Status INT, -- 1: Pending, 2: Approved, 3: Rejected
+    FOREIGN KEY (GenreID) REFERENCES Genre(ID),
+    FOREIGN KEY (SellerID) REFERENCES Users(ID)
+);
+
+-- Address table: stores addresses of users
+CREATE TABLE Address (
+    ID INT NOT NULL IDENTITY PRIMARY KEY,
+    UserID INT,
+    Address VARCHAR(255),
+    City VARCHAR(255),
+    PostalCode VARCHAR(20),
+    Country VARCHAR(255),
+    MobileNumber VARCHAR(20),
+    FOREIGN KEY (UserID) REFERENCES Users(ID)
+);
+
+-- Orders table: stores information about orders
+CREATE TABLE Orders (
+    ID INT NOT NULL IDENTITY PRIMARY KEY,
+    BuyerID INT,
+    OrderDate DATE,
+    Status INT, -- 1: Order Placed, 2: Packed, 3: Shipping, 4: Delivered
+    FOREIGN KEY (BuyerID) REFERENCES Users(ID)
+);
+
+-- OrderItems table: stores information about items in each order
+CREATE TABLE OrderItems (
+    ID INT NOT NULL IDENTITY PRIMARY KEY,
+    OrderID INT,
+    BookID INT,
+    Quantity INT,
+    Amount INT,
+    FOREIGN KEY (OrderID) REFERENCES Orders(ID),
+    FOREIGN KEY (BookID) REFERENCES Books(ID)
+);
+
+-- Reviews table: stores information about book reviews
+CREATE TABLE Reviews (
+    ID INT NOT NULL IDENTITY PRIMARY KEY,
+    BookID INT,
+    UserID INT,
+    ReviewContent TEXT,
+    ReviewDate DATE,
+    Rating INT, -- Example: Scale from 1 to 5
+    FOREIGN KEY (BookID) REFERENCES Books(ID),
+    FOREIGN KEY (UserID) REFERENCES Users(ID)
+);
+
+-- CartItems table: stores information about items in each user's cart
+CREATE TABLE CartItems (
+    ID INT NOT NULL IDENTITY PRIMARY KEY,
+    UserID INT,
+    BookID INT,
+    Quantity INT,
+    FOREIGN KEY (UserID) REFERENCES Users(ID),
+    FOREIGN KEY (BookID) REFERENCES Books(ID)
+);
