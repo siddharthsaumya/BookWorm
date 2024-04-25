@@ -94,3 +94,24 @@ CREATE TABLE CartItems (
     FOREIGN KEY (UserID) REFERENCES Users(ID),
     FOREIGN KEY (BookID) REFERENCES Books(ID)
 );
+
+select * from Genre;
+select * from Users;
+select * from Books;
+select * from Address;
+select * from Orders;
+select * from OrderItems;
+select * from Reviews;
+select * from CartItems;
+
+INSERT INTO Users (Name, Username, Password, Email, IsActive, IsSeller)
+VALUES ('John Doe', 'johndoe', 'password123', 'johndoe@example.com', 1, 1);
+
+
+
+-- Insert dummy genres
+INSERT INTO Genre (Name) VALUES ('Fiction');
+INSERT INTO Genre (Name) VALUES ('Non-fiction');
+INSERT INTO Genre (Name) VALUES ('Science Fiction');
+INSERT INTO Genre (Name) VALUES ('Fantasy');
+INSERT INTO Genre (Name) VALUES ('Mystery');
